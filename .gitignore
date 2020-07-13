@@ -1,0 +1,8 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/src/.vs/RecipeManager/v16
+/src/bin/Debug/netcoreapp3.1
+*.user
+/src/obj
