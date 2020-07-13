@@ -1,2 +1,2 @@
 language: csharp
-solution: RecipeManager.sln
+solution: ./src/RecipeManager.sln
