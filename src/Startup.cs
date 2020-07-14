@@ -1,17 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using RecipeManager.Core;
+using RecipeManager.Core.Interfaces;
+using RecipeManager.Core.Repositories;
 
-namespace backend
+namespace RecipeManager.API
 {
     public class Startup
     {
@@ -25,6 +22,11 @@ namespace backend
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddDbContext<RecipeManagerContext>(options =>
+                options.UseNpgsql(Configuration.GetConnectionString("RecipeManagerContext")));
+            services.AddScoped<IRecipeRepository, RecipeRepository>();
+
             services.AddControllers();
         }
 

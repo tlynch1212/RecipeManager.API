@@ -6,3 +6,4 @@
 /src/bin/Debug/netcoreapp3.1
 *.user
 /src/obj
+src/.vs/RecipeManager/DesignTimeBuild/.dtbcache
