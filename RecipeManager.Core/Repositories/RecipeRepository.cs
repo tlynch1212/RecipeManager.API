@@ -15,12 +15,20 @@ namespace RecipeManager.Core.Repositories
 
         public List<Recipe> GetRecipes()
         {
-            return _dbContext.Recipes.ToList();
+            return _dbContext.Recipes.Take(20).ToList();
         }
 
-        public void CreateRecipe(Recipe recipe)
+        public void CreateRecipe(Recipe recipe, bool save)
         {
             _dbContext.Recipes.Add(recipe);
+            if (save)
+            {
+                _dbContext.SaveChanges();
+            }
+        }
+
+        public void SaveChanges()
+        {
             _dbContext.SaveChanges();
         }
 

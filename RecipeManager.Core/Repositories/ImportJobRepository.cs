@@ -21,7 +21,7 @@ namespace RecipeManager.Core.Repositories
 
         public ImportJob GetJob(int jobId)
         {
-            return _dbContext.ImportJobs.Include(x => x.Status).Include(x => x.DataToImport).FirstOrDefault(t => t.Id == jobId);
+            return _dbContext.ImportJobs.Include(x => x.Status).FirstOrDefault(t => t.Id == jobId);
         }
 
         public void Update(ImportJob importJob)

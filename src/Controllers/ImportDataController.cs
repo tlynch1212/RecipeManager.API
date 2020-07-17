@@ -29,13 +29,13 @@ namespace RecipeManager.API.Controllers
             return Ok("Job Started Successfully.");
         }
 
-        [HttpGet("restart")]
-        public IActionResult Restart([FromQuery] int jobId)
+        [HttpPost("restart")]
+        public IActionResult Restart([FromQuery] int jobId, [FromBody] List<ImportModel> data)
         {
             var job = _importService.CheckStatus(jobId);
             if (job != null)
             {
-                BackgroundJob.Enqueue(() => _importService.RestartImport(job));
+                BackgroundJob.Enqueue(() => _importService.RestartImport(job, data));
                 return Ok($"Job {jobId} Restarted Successfully.");
             }else
             {
@@ -49,7 +49,7 @@ namespace RecipeManager.API.Controllers
         {
             try
             {
-                var job = _importService.CheckStatusLite(jobId);
+                var job = _importService.CheckStatus(jobId);
 
                 if (job != null)
                 {

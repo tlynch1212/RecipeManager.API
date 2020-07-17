@@ -1,4 +1,5 @@
-﻿using RecipeManager.Core.Models;
+﻿using Microsoft.Extensions.Logging;
+using RecipeManager.Core.Models;
 using RecipeManager.Core.Repositories;
 using System;
 using System.Collections.Generic;
@@ -10,20 +11,22 @@ namespace RecipeManager.Core.Import
         private readonly IRecipeRepository _recipeRepository;
         private readonly IImportJobRepository _importJobRepository;
         private readonly IImportStatusRepository _importStatusRepository;
-        public ImportService(IRecipeRepository recipeRepository, IImportJobRepository importJobRepository, IImportStatusRepository importStatusRepository)
+        private ILogger<IImportService> _logger;
+        public ImportService(ILogger<IImportService> logger, IRecipeRepository recipeRepository, IImportJobRepository importJobRepository, IImportStatusRepository importStatusRepository)
         {
+            _logger = logger;
             _recipeRepository = recipeRepository;
             _importJobRepository = importJobRepository;
             _importStatusRepository = importStatusRepository;
         }
 
 
-        public void RestartImport(ImportJob importJob)
+        public void RestartImport(ImportJob importJob, List<ImportModel> data)
         {
             if (importJob.Status.Id == (int)ImportStatus.Fail)
             {
                 SetJobWorking(importJob);
-                ImportData(importJob);
+                ImportData(importJob, data);
             }
         }
 
@@ -40,44 +43,44 @@ namespace RecipeManager.Core.Import
         public void StartImport(List<ImportModel> data)
         {
             var importJob = StartJob(data);
-            ImportData(importJob);
+            ImportData(importJob, data);
         }
 
-        private void ImportData(ImportJob importJob)
+        private void ImportData(ImportJob importJob, List<ImportModel> data)
         {
             try
             {
-                foreach (var importModel in importJob.DataToImport.ToArray())
+                int batch = 0;
+                foreach (var importModel in data)
                 {
                     var convertedRecipe = ConvertToRecipe(importModel);
                     if (convertedRecipe != null)
                     {
                         if (_recipeRepository.CheckDuplication(convertedRecipe) == null)
                         {
-                            _recipeRepository.CreateRecipe(convertedRecipe);
-                            UpdateWorkingJob(importJob, importModel, true);
+                            _recipeRepository.CreateRecipe(convertedRecipe, false);
+                            batch += 1;
                         }
-                        else
+                        if (batch >= 1000)
                         {
-                            UpdateWorkingJob(importJob, importModel, false);
+                            _recipeRepository.SaveChanges();
+                            UpdateWorkingJob(importJob, 1000);
+                            batch = 0;
                         }
                     }
                 }
                 SetJobSuccessful(importJob);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogError("Error Processing job - ", ex.Message);
                 SetJobFailure(importJob);
             }
         }
 
-        private void UpdateWorkingJob(ImportJob importJob, ImportModel importModel, bool gotImported)
+        private void UpdateWorkingJob(ImportJob importJob, int importCount)
         {
-            importJob.DataToImport.Remove(importModel);
-            if (gotImported)
-            {
-                importJob.ImportedCount += 1;
-            }
+            importJob.ImportedCount += importCount;
             _importJobRepository.Update(importJob);
         }
 
@@ -104,7 +107,6 @@ namespace RecipeManager.Core.Import
         {
             var importJob = new ImportJob
             {
-                DataToImport = data,
                 StartDate = DateTime.Now,
                 Status = _importStatusRepository.GetStatus((int)ImportStatus.Working),
                 TotalCount = data.Count,
@@ -117,14 +119,25 @@ namespace RecipeManager.Core.Import
 
         private Recipe ConvertToRecipe(ImportModel importModel)
         {
-            return new Recipe
+            Recipe recipe = null;
+            if (importModel.title != null)
             {
-                Name = importModel.title,
-                Instructions = importModel.instructions,
-                Ingredients = ConvertIngredients(importModel.ingredients),
-                IsPublic = true,
-                IsShared = false
-            };
+                if (importModel.instructions != null)
+                {
+                    if (importModel.ingredients != null)
+                    {
+                        recipe =  new Recipe
+                        {
+                            Name = importModel.title,
+                            Instructions = importModel.instructions,
+                            Ingredients = ConvertIngredients(importModel.ingredients),
+                            IsPublic = true,
+                            IsShared = false
+                        };
+                    }
+                }
+            }
+            return recipe;
         }
 
         private static List<Ingredient> ConvertIngredients(List<string> ingredients)

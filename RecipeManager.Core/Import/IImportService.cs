@@ -7,7 +7,7 @@ namespace RecipeManager.Core.Import
     {
         public ImportJob CheckStatus(int jobId);
         ImportJob CheckStatusLite(int jobId);
-        void RestartImport(ImportJob importJob);
+        void RestartImport(ImportJob importJob, List<ImportModel> data);
         void StartImport(List<ImportModel> data);
     }
 }
