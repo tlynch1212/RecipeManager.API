@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RecipeManager.Core.Interfaces;
 using RecipeManager.Core.Models;
 
 namespace RecipeManager.Core
@@ -8,8 +7,9 @@ namespace RecipeManager.Core
     {
         public DbSet<Recipe> Recipes { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<Unit> Units { get; set; }
         public DbSet<Ingredient> Ingredients { get; set; }
+        public DbSet<ImportJob> ImportJobs{ get; set; }
+        public DbSet<ImportStatus> ImportStatus { get; set; }
 
         public RecipeManagerContext(DbContextOptions<RecipeManagerContext> options)
     : base(options)

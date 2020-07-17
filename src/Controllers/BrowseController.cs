@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using RecipeManager.Core.Interfaces;
 using RecipeManager.Core.Models;
+using RecipeManager.Core.Repositories;
 
 namespace RecipeManager.API.Controllers
 {

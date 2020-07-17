@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace RecipeManager.Core.Models
 {
@@ -12,8 +13,7 @@ namespace RecipeManager.Core.Models
         public bool IsPublic { get; set; }
         public bool IsShared { get; set; }
         public List<User> SharedWith { get; set; }
-
-
-
+        public DateTime CreatedDate { get; set; }
+        public DateTime ChangedDate { get; set; }
     }
 }

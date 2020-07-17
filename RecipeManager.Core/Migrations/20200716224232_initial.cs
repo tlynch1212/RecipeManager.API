@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace RecipeManager.Core.Migrations
@@ -8,38 +9,17 @@ namespace RecipeManager.Core.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Units",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Units", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Ingredients",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(nullable: true),
-                    Quantity = table.Column<int>(nullable: false),
-                    UnitId = table.Column<int>(nullable: true),
+                    Value = table.Column<string>(nullable: true),
                     RecipeId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Ingredients", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Ingredients_Units_UnitId",
-                        column: x => x.UnitId,
-                        principalTable: "Units",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -68,7 +48,9 @@ namespace RecipeManager.Core.Migrations
                     Name = table.Column<string>(nullable: true),
                     Instructions = table.Column<string>(nullable: true),
                     IsPublic = table.Column<bool>(nullable: false),
-                    IsShared = table.Column<bool>(nullable: false)
+                    IsShared = table.Column<bool>(nullable: false),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    ChangedDate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -85,11 +67,6 @@ namespace RecipeManager.Core.Migrations
                 name: "IX_Ingredients_RecipeId",
                 table: "Ingredients",
                 column: "RecipeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Ingredients_UnitId",
-                table: "Ingredients",
-                column: "UnitId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Recipes_UserId",
@@ -126,9 +103,6 @@ namespace RecipeManager.Core.Migrations
 
             migrationBuilder.DropTable(
                 name: "Ingredients");
-
-            migrationBuilder.DropTable(
-                name: "Units");
 
             migrationBuilder.DropTable(
                 name: "Recipes");
