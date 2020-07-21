@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using RecipeManager.Core.Models;
 using RecipeManager.Core.Repositories;
 using System;
+using System.Collections.Generic;
 
 namespace RecipeManager.API.Controllers
 {
@@ -34,6 +35,12 @@ namespace RecipeManager.API.Controllers
                 _logger.LogError(e.Message);
                 return StatusCode(500);
             }
+        }
+
+        [HttpGet]
+        public IEnumerable<Recipe> Get([FromQuery] string userId)
+        {
+            return _recipeRepository.GetRecipesForUser(userId);
         }
     }
 }

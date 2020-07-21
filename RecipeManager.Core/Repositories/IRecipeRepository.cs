@@ -9,5 +9,6 @@ namespace RecipeManager.Core.Repositories
         Recipe CheckDuplication(Recipe recipe);
         void SaveChanges();
         void CreateRecipe(Recipe recipe, bool save);
+        List<Recipe> GetRecipesForUser(string userId);
     }
 }

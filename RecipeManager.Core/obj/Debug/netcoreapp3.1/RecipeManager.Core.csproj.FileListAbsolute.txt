@@ -1,7 +1,0 @@
-C:\Development\RecipeManager.API\RecipeManager.Core\bin\Debug\netcoreapp3.1\RecipeManager.Core.deps.json
-C:\Development\RecipeManager.API\RecipeManager.Core\bin\Debug\netcoreapp3.1\RecipeManager.Core.dll
-C:\Development\RecipeManager.API\RecipeManager.Core\bin\Debug\netcoreapp3.1\RecipeManager.Core.pdb
-C:\Development\RecipeManager.API\RecipeManager.Core\obj\Debug\netcoreapp3.1\RecipeManager.Core.AssemblyInfoInputs.cache
-C:\Development\RecipeManager.API\RecipeManager.Core\obj\Debug\netcoreapp3.1\RecipeManager.Core.AssemblyInfo.cs
-C:\Development\RecipeManager.API\RecipeManager.Core\obj\Debug\netcoreapp3.1\RecipeManager.Core.dll
-C:\Development\RecipeManager.API\RecipeManager.Core\obj\Debug\netcoreapp3.1\RecipeManager.Core.pdb

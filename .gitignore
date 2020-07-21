@@ -2,8 +2,9 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/src/.vs/RecipeManager/v16
-/src/bin/Debug/netcoreapp3.1
+.vs/
+bin/
 *.user
-/src/obj
-src/.vs/RecipeManager/DesignTimeBuild/.dtbcache
+obj/
+RecipeManager.Core/obj/
+RecipeManager.Core/bin/
