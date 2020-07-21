@@ -1,4 +1,5 @@
 ﻿using Hangfire;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RecipeManager.Core.Import;
@@ -11,6 +12,7 @@ namespace RecipeManager.API.Controllers
     [Route("[controller]")]
     [ApiController]
     [DisableRequestSizeLimit]
+    [Authorize]
     public class ImportDataController : ControllerBase
     {
         private readonly ILogger<ImportDataController> _logger;

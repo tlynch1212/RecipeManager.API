@@ -9,10 +9,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="3301dtap.cgq~" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="HangFire" Version="1.7.11" />
     <PackageReference Include="Hangfire.AspNetCore" Version="1.7.11" />
     <PackageReference Include="HangFire.Core" Version="1.7.11" />
     <PackageReference Include="Hangfire.PostgreSql" Version="1.7.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.6" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.9.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.5">

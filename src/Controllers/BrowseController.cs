@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RecipeManager.Core.Models;
@@ -8,6 +9,7 @@ namespace RecipeManager.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class BrowseController : ControllerBase
     {
         private readonly ILogger<BrowseController> _logger;

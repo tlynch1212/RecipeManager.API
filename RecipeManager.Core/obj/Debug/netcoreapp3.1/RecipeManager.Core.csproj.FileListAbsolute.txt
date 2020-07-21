@@ -5,4 +5,3 @@ C:\Development\RecipeManager.API\RecipeManager.Core\obj\Debug\netcoreapp3.1\Reci
 C:\Development\RecipeManager.API\RecipeManager.Core\obj\Debug\netcoreapp3.1\RecipeManager.Core.AssemblyInfo.cs
 C:\Development\RecipeManager.API\RecipeManager.Core\obj\Debug\netcoreapp3.1\RecipeManager.Core.dll
 C:\Development\RecipeManager.API\RecipeManager.Core\obj\Debug\netcoreapp3.1\RecipeManager.Core.pdb
-C:\Development\RecipeManager.API\RecipeManager.Core\obj\Debug\netcoreapp3.1\RecipeManager.Core.csprojAssemblyReference.cache

@@ -10,6 +10,7 @@ namespace RecipeManager.Core.Models
         public string title { get; set; }
         public List<string> ingredients { get; set; }
         public string instructions { get; set; }
+        public bool isPublic { get; set; }
         public string picture_link { get; set; }
     }
 }
