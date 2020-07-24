@@ -15,9 +15,9 @@ namespace RecipeManager.Core.Repositories
             _dbContext = context;
         }
 
-        public List<Recipe> GetRecipes()
+        public List<Recipe> GetRecipes(int fetchCount)
         {
-            return _dbContext.Recipes.Take(20).ToList();
+            return _dbContext.Recipes.Where(r => r.IsPublic == true).Take(fetchCount).Include("Ingredients").ToList();
         }
 
         public List<Recipe> GetRecipesForUser(string userId)

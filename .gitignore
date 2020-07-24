@@ -8,3 +8,6 @@ bin/
 obj/
 RecipeManager.Core/obj/
 RecipeManager.Core/bin/
+src/Properties/PublishProfiles/RecipeManagerAPI - Web Deploy.pubxml
+src/.config/dotnet-tools.json
+src/appsettings.prod.json

@@ -38,9 +38,9 @@ namespace RecipeManager.API.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Recipe> Get([FromQuery] string userId)
+        public IActionResult Get([FromQuery] string userId)
         {
-            return _recipeRepository.GetRecipesForUser(userId);
+            return Ok(_recipeRepository.GetRecipesForUser(userId));
         }
     }
 }

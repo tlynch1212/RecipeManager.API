@@ -22,9 +22,9 @@ namespace RecipeManager.API.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Recipe> Get()
+        public IEnumerable<Recipe> Get([FromQuery] int fetchCount)
         {
-            return _recipeRepository.GetRecipes();
+            return _recipeRepository.GetRecipes(fetchCount);
         }
     }
 }
