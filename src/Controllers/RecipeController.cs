@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RecipeManager.Core.Models;
+using RecipeManager.Core.Recommendations.Models;
 using RecipeManager.Core.Repositories;
 using System;
-using System.Collections.Generic;
 
 namespace RecipeManager.API.Controllers
 {
@@ -31,6 +31,36 @@ namespace RecipeManager.API.Controllers
                 return Ok();
             }
             catch(Exception e)
+            {
+                _logger.LogError(e.Message);
+                return StatusCode(500);
+            }
+        }
+
+        [HttpPut]
+        public IActionResult Update([FromBody] Recipe recipe)
+        {
+            try
+            {
+                _recipeRepository.UpdateRecipe(recipe, true);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return StatusCode(500);
+            }
+        }
+
+        [HttpDelete]
+        public IActionResult Delete([FromBody] Recipe recipe)
+        {
+            try
+            {
+                _recipeRepository.DeleteRecipe(recipe, true);
+                return Ok();
+            }
+            catch (Exception e)
             {
                 _logger.LogError(e.Message);
                 return StatusCode(500);

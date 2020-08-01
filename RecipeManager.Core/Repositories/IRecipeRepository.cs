@@ -1,4 +1,5 @@
 ﻿using RecipeManager.Core.Models;
+using RecipeManager.Core.Recommendations.Models;
 using System.Collections.Generic;
 
 namespace RecipeManager.Core.Repositories
@@ -10,5 +11,7 @@ namespace RecipeManager.Core.Repositories
         void SaveChanges();
         void CreateRecipe(Recipe recipe, bool save);
         List<Recipe> GetRecipesForUser(string userId);
+        void DeleteRecipe(Recipe recipe, bool save);
+        void UpdateRecipe(Recipe recipe, bool save);
     }
 }

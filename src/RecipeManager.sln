@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RecipeManager.API", "RecipeManager.API.csproj", "{BD41D845-A822-4DF7-9CD6-521709AE2DD4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecipeManager.Core", "..\RecipeManager.Core\RecipeManager.Core.csproj", "{8A78E37C-44F2-44E2-B559-B36245F4E649}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RecipeManager.Core", "..\RecipeManager.Core\RecipeManager.Core.csproj", "{8A78E37C-44F2-44E2-B559-B36245F4E649}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

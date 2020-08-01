@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RecipeManager.Core.Models;
+using RecipeManager.Core.Recommendations.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace RecipeManager.Core.Repositories
 
         public List<Recipe> GetRecipes(int fetchCount)
         {
-            return _dbContext.Recipes.Where(r => r.IsPublic == true).Take(fetchCount).Include("Ingredients").ToList();
+            return _dbContext.Recipes.Where(r => r.IsPublic == true).OrderBy(t => Guid.NewGuid()).Take(fetchCount).Include("Ingredients").ToList();
         }
 
         public List<Recipe> GetRecipesForUser(string userId)
@@ -43,6 +44,24 @@ namespace RecipeManager.Core.Repositories
         public Recipe CheckDuplication(Recipe recipe)
         {
             return _dbContext.Recipes.FirstOrDefault(t => t.Name.Equals(recipe.Name) && t.Instructions.Equals(recipe.Instructions));
+        }
+
+        public void UpdateRecipe(Recipe recipe, bool save)
+        {
+            _dbContext.Recipes.Update(recipe);
+            if (save)
+            {
+                _dbContext.SaveChanges();
+            }
+        }
+
+        public void DeleteRecipe(Recipe recipe, bool save)
+        {
+            _dbContext.Recipes.Remove(recipe);
+            if (save)
+            {
+                _dbContext.SaveChanges();
+            }
         }
     }
 }

@@ -7,11 +7,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 using RecipeManager.Core;
-using RecipeManager.Core.Import;
+using RecipeManager.Core.Recommendations;
 using RecipeManager.Core.Repositories;
-using System.Security.Claims;
 
 namespace RecipeManager.API
 {
@@ -32,9 +30,7 @@ namespace RecipeManager.API
             services.AddDbContext<RecipeManagerContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("RecipeManagerContext")));
             services.AddScoped<IRecipeRepository, RecipeRepository>();
-            services.AddScoped<IImportStatusRepository, ImportStatusRepository>();
-            services.AddScoped<IImportJobRepository, ImportJobRepository>();
-            services.AddScoped<IImportService, ImportService>();
+            services.AddScoped<ITrainer, Trainer>();
             services.AddControllers();
             services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
             {
