@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RecipeManager.Core.Models;
-using RecipeManager.Core.Recommendations.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,6 +12,11 @@ namespace RecipeManager.Core.Repositories
         public RateRepository(RecipeManagerContext context)
         {
             _dbContext = context;
+        }
+
+        public List<Rating> GetAll()
+        {
+            return _dbContext.Ratings.ToList();
         }
 
         public void CreateRating(Rating rating, bool save)

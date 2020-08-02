@@ -1,5 +1,3 @@
-using Hangfire;
-using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -25,12 +23,12 @@ namespace RecipeManager.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddHangfire(config =>
-                config.UsePostgreSqlStorage(Configuration.GetConnectionString("HangfireConnection")));
             services.AddDbContext<RecipeManagerContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("RecipeManagerContext")));
+            services.AddScoped<IRateRepository, RateRepository>();
             services.AddScoped<IRecipeRepository, RecipeRepository>();
             services.AddScoped<ITrainer, Trainer>();
+            services.AddScoped<IPredictor, Predictor>();
             services.AddControllers();
             services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
             {
@@ -59,18 +57,11 @@ namespace RecipeManager.API
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHangfireServer();
-            app.UseHangfireDashboard();
-
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
             app.UseCors("MyPolicy");
-
             app.UseAuthentication();
             app.UseAuthorization();
-
 
             app.UseEndpoints(endpoints =>
             {

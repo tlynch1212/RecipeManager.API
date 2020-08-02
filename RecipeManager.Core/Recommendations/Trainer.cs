@@ -1,53 +1,74 @@
-﻿using Microsoft.ML;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.ML;
 using Microsoft.ML.Data;
 using Microsoft.ML.Trainers;
+using RecipeManager.Core.Models;
 using RecipeManager.Core.Recommendations.Models;
+using RecipeManager.Core.Repositories;
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace RecipeManager.Core.Recommendations
 {
     public class Trainer : ITrainer
     {
+        private IRateRepository _rateRepository;
+
+        public Trainer(IRateRepository rateRepository)
+        {
+            _rateRepository = rateRepository;
+        }
+
         public RegressionMetrics Train()
         {
             var mlContext = new MLContext();
             (IDataView trainingDataView, IDataView testDataView) = LoadData(mlContext);
-            var model = BuildAndTrainModel(mlContext, trainingDataView);
-            return EvaluateModel(mlContext, testDataView, model);
+            var trainedModel = BuildAndTrainModel(mlContext, trainingDataView);
+            mlContext.Model.Save(trainedModel, trainingDataView.Schema, "model.zip");
+            return EvaluateModel(mlContext, testDataView, trainedModel);
         }
 
-        public static (IDataView training, IDataView test) LoadData(MLContext mlContext)
+        public (IDataView training, IDataView test) LoadData(MLContext mlContext)
         {
-            var trainingData = new List<RecipeModel>();
-            var testData = new List<RecipeModel>();
+            var r = new Random();
+            var data = _rateRepository.GetAll().Select(s => new RecipeModel
+            {
+                UserId = int.Parse(s.UserId),
+                RecipeId = s.RecipeId,
+                Rating = s.Rate
+            }).OrderBy(t => r.Next()).ToList();
+            var splitAmount = (int)(data.Count * 0.80);
+            var trainingData = data.Take(splitAmount);
+            var testData = data.Skip(splitAmount);
             IDataView trainingDataView = mlContext.Data.LoadFromEnumerable(trainingData);
             IDataView testDataView = mlContext.Data.LoadFromEnumerable(testData);
 
             return (trainingDataView, testDataView);
         }
 
-        public static ITransformer BuildAndTrainModel(MLContext mlContext, IDataView trainingDataView)
+        public ITransformer BuildAndTrainModel(MLContext mlContext, IDataView trainingDataView)
         {
-            var estimator = mlContext.Transforms.Conversion.MapValueToKey(outputColumnName: "userIdEncoded", inputColumnName: "userId")
-                                                        .Append(mlContext.Transforms.Conversion.MapValueToKey(outputColumnName: "movieIdEncoded", inputColumnName: "movieId"));
             var options = new MatrixFactorizationTrainer.Options
             {
-                MatrixColumnIndexColumnName = "userIdEncoded",
-                MatrixRowIndexColumnName = "movieIdEncoded",
-                LabelColumnName = "Label",
-                NumberOfIterations = 20,
+                MatrixColumnIndexColumnName = "UserIdEncoded",
+                MatrixRowIndexColumnName = "RecipeIdEncoded",
+                LabelColumnName = "Rating",
+                NumberOfIterations = 100000,
                 ApproximationRank = 100
             };
-
+            var estimator = mlContext.Transforms.Conversion.MapValueToKey(outputColumnName: "UserIdEncoded", inputColumnName: "UserId")
+                                                        .Append(mlContext.Transforms.Conversion.MapValueToKey(outputColumnName: "RecipeIdEncoded", inputColumnName: "RecipeId"));
             var trainerEstimator = estimator.Append(mlContext.Recommendation().Trainers.MatrixFactorization(options));
 
             return trainerEstimator.Fit(trainingDataView);
         }
 
-        public static RegressionMetrics EvaluateModel(MLContext mlContext, IDataView testDataView, ITransformer model)
+        public RegressionMetrics EvaluateModel(MLContext mlContext, IDataView testDataView, ITransformer model)
         {
             var prediction = model.Transform(testDataView);
-            return mlContext.Regression.Evaluate(prediction, labelColumnName: "Label", scoreColumnName: "Score");
+            return mlContext.Regression.Evaluate(prediction, labelColumnName: "Rating", scoreColumnName: "Score");
         }
     }
 }

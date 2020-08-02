@@ -2,7 +2,7 @@
 {
     public class RecipePrediction
     {
-        public float Label;
+        public float Rating;
         public float Score;
     }
 }

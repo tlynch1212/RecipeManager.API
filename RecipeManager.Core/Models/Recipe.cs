@@ -8,7 +8,9 @@ namespace RecipeManager.Core.Models
         public int Id { get; set; }
         public string UserId { get; set; }
         public string Name { get; set; }
-        public string Instructions { get; set; }
+        public string Description { get; set; }
+        public int TimeToCook { get; set; }
+        public List<Instruction> Instructions { get; set; }
         public List<Ingredient> Ingredients { get; set; }
         public bool IsPublic { get; set; }
         public bool IsShared { get; set; }

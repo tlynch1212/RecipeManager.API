@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RecipeManager.Core.Recommendations;
+using RecipeManager.Core.Recommendations.Models;
 
 namespace RecipeManager.API.Controllers
 {
@@ -13,11 +14,13 @@ namespace RecipeManager.API.Controllers
     {
         private readonly ILogger<RecommendationController> _logger;
         private readonly ITrainer _trainer;
+        private readonly IPredictor _predictor;
 
-        public RecommendationController(ILogger<RecommendationController> logger, ITrainer trainer)
+        public RecommendationController(ILogger<RecommendationController> logger, ITrainer trainer, IPredictor predictor)
         {
             _logger = logger;
             _trainer = trainer;
+            _predictor = predictor;
         }
 
         [HttpGet]
@@ -26,6 +29,21 @@ namespace RecipeManager.API.Controllers
             try
             {
                 return Ok(_trainer.Train());
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return StatusCode(500);
+            }
+        }
+
+        [HttpGet("predict")]
+        public IActionResult Predict(RecipeModel recipeModel)
+        {
+            try
+            {
+                var prediction = _predictor.Predict(recipeModel);
+                return Ok(prediction.Score.ToString());
             }
             catch (Exception e)
             {
