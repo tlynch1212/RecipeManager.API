@@ -15,11 +15,13 @@ namespace RecipeManager.API.Controllers
     {
         private readonly ILogger<RecipeController> _logger;
         private readonly IRecipeRepository _recipeRepository;
+        private readonly IUserRepository _userRepository;
 
-        public RecipeController(ILogger<RecipeController> logger, IRecipeRepository recipeRepository)
+        public RecipeController(ILogger<RecipeController> logger, IRecipeRepository recipeRepository, IUserRepository userRepository)
         {
             _logger = logger;
             _recipeRepository = recipeRepository;
+            _userRepository = userRepository;
         }
 
         [HttpPost]
@@ -70,7 +72,8 @@ namespace RecipeManager.API.Controllers
         [HttpGet]
         public IActionResult Get([FromQuery] string userId)
         {
-            return Ok(_recipeRepository.GetRecipesForUser(userId));
+            var user = _userRepository.GetByAuthId(userId);
+            return Ok(_recipeRepository.GetRecipesForUser(user.Id.ToString()));
         }
     }
 }

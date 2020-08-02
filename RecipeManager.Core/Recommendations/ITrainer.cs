@@ -4,6 +4,6 @@ namespace RecipeManager.Core.Recommendations
 {
     public interface ITrainer
     {
-        RegressionMetrics Train();
+        RegressionMetrics Train(int numberOfIterations);
     }
 }

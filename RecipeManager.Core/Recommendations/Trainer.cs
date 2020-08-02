@@ -21,11 +21,11 @@ namespace RecipeManager.Core.Recommendations
             _rateRepository = rateRepository;
         }
 
-        public RegressionMetrics Train()
+        public RegressionMetrics Train(int numberOfIterations)
         {
             var mlContext = new MLContext();
             (IDataView trainingDataView, IDataView testDataView) = LoadData(mlContext);
-            var trainedModel = BuildAndTrainModel(mlContext, trainingDataView);
+            var trainedModel = BuildAndTrainModel(mlContext, trainingDataView, numberOfIterations);
             mlContext.Model.Save(trainedModel, trainingDataView.Schema, "model.zip");
             return EvaluateModel(mlContext, testDataView, trainedModel);
         }
@@ -48,14 +48,14 @@ namespace RecipeManager.Core.Recommendations
             return (trainingDataView, testDataView);
         }
 
-        public ITransformer BuildAndTrainModel(MLContext mlContext, IDataView trainingDataView)
+        public ITransformer BuildAndTrainModel(MLContext mlContext, IDataView trainingDataView, int numberOfIterations)
         {
             var options = new MatrixFactorizationTrainer.Options
             {
                 MatrixColumnIndexColumnName = "UserIdEncoded",
                 MatrixRowIndexColumnName = "RecipeIdEncoded",
                 LabelColumnName = "Rating",
-                NumberOfIterations = 100000,
+                NumberOfIterations = numberOfIterations,
                 ApproximationRank = 100
             };
             var estimator = mlContext.Transforms.Conversion.MapValueToKey(outputColumnName: "UserIdEncoded", inputColumnName: "UserId")

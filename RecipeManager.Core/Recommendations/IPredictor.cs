@@ -1,9 +1,10 @@
-﻿using RecipeManager.Core.Recommendations.Models;
+﻿using RecipeManager.Core.Models;
+using System.Collections.Generic;
 
 namespace RecipeManager.Core.Recommendations
 {
     public interface IPredictor
     {
-        RecipePrediction Predict(RecipeModel dataToPredict);
+        List<Recipe> Predict(int userId, int amount);
     }
 }

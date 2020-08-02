@@ -13,5 +13,7 @@ namespace RecipeManager.Core.Repositories
         List<Recipe> GetRecipesForUser(string userId);
         void DeleteRecipe(Recipe recipe, bool save);
         void UpdateRecipe(Recipe recipe, bool save);
+        List<int> GetRecipeIds();
+        Recipe GetRecipeById(int id);
     }
 }

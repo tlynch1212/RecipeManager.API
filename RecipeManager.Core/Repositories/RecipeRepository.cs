@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RecipeManager.Core.Models;
-using RecipeManager.Core.Recommendations.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +18,16 @@ namespace RecipeManager.Core.Repositories
         public List<Recipe> GetRecipes(int fetchCount)
         {
             return _dbContext.Recipes.Where(r => r.IsPublic == true).OrderBy(t => Guid.NewGuid()).Take(fetchCount).Include("Ingredients").ToList();
+        }
+
+        public Recipe GetRecipeById(int id)
+        {
+            return _dbContext.Recipes.Include("Ingredients").Include("Instructions").FirstOrDefault(t => t.Id == id);
+        }
+
+        public List<int> GetRecipeIds()
+        {
+            return _dbContext.Recipes.Where(r => r.IsPublic == true).OrderBy(t => Guid.NewGuid()).Select(t => t.Id).ToList();
         }
 
         public List<Recipe> GetRecipesForUser(string userId)
