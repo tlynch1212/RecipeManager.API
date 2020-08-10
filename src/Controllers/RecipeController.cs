@@ -10,7 +10,7 @@ namespace RecipeManager.API.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    [Authorize]
+   // [Authorize]
     public class RecipeController : ControllerBase
     {
         private readonly ILogger<RecipeController> _logger;
@@ -54,6 +54,38 @@ namespace RecipeManager.API.Controllers
             }
         }
 
+        [HttpPut("favorite")]
+        public IActionResult Favorite([FromBody] FavoriteModel favorite)
+        {
+            try
+            {
+                var user = _userRepository.GetByAuthId(favorite.UserId);
+                _recipeRepository.FavoriteRecipe(favorite.RecipeId, user.Id.ToString(), true);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return StatusCode(500);
+            }
+        }
+
+        [HttpPut("unfavorite")]
+        public IActionResult UnFavorite([FromBody] FavoriteModel favorite)
+        {
+            try
+            {
+                var user = _userRepository.GetByAuthId(favorite.UserId);
+                _recipeRepository.UnFavoriteRecipe(favorite.RecipeId, user.Id.ToString(), true);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return StatusCode(500);
+            }
+        }
+
         [HttpDelete]
         public IActionResult Delete([FromBody] Recipe recipe)
         {
@@ -69,11 +101,17 @@ namespace RecipeManager.API.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("user")]
         public IActionResult Get([FromQuery] string userId)
         {
             var user = _userRepository.GetByAuthId(userId);
             return Ok(_recipeRepository.GetRecipesForUser(user.Id.ToString()));
+        }
+
+        [HttpGet]
+        public IActionResult GetById([FromQuery] int recipeId)
+        {
+            return Ok(_recipeRepository.GetRecipeById(recipeId));
         }
     }
 }

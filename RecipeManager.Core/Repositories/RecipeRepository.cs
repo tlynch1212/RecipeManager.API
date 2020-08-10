@@ -17,7 +17,7 @@ namespace RecipeManager.Core.Repositories
 
         public List<Recipe> GetRecipes(int fetchCount)
         {
-            return _dbContext.Recipes.Where(r => r.IsPublic == true).OrderBy(t => Guid.NewGuid()).Take(fetchCount).Include("Ingredients").ToList();
+            return _dbContext.Recipes.Where(r => r.IsPublic == true).OrderBy(t => Guid.NewGuid()).Take(fetchCount).Include("Ingredients").Include("Instructions").ToList();
         }
 
         public Recipe GetRecipeById(int id)
@@ -32,7 +32,42 @@ namespace RecipeManager.Core.Repositories
 
         public List<Recipe> GetRecipesForUser(string userId)
         {
-            return _dbContext.Recipes.Where(t => t.UserId == userId).Include("Ingredients").ToList();
+            return _dbContext.Recipes.Where(t => t.UserId == userId && t.IsShared && t.SharedWith.Contains(userId)).Include("Ingredients").Include("Instructions").ToList();
+        }
+
+        public void FavoriteRecipe(int recipeId, string userId, bool save)
+        {
+            var recipe = _dbContext.Recipes.Find(recipeId);
+            if (recipe.IsPublic)
+            {
+                if (recipe.SharedWith == null)
+                {
+                    recipe.SharedWith = new List<string>();
+                }
+                if (!recipe.SharedWith.Contains(userId))
+                {
+                    recipe.SharedWith.Add(userId);
+                    _dbContext.Recipes.Update(recipe);
+                    if (save)
+                    {
+                        _dbContext.SaveChanges();
+                    }
+                }
+            }
+        }
+
+        public void UnFavoriteRecipe(int recipeId, string userId, bool save)
+        {
+            var recipe = _dbContext.Recipes.Find(recipeId);
+            if (recipe.IsPublic)
+            {
+                recipe.SharedWith.Remove(userId);
+                _dbContext.Recipes.Update(recipe);
+                if (save)
+                {
+                    _dbContext.SaveChanges();
+                }
+            }
         }
 
         public void CreateRecipe(Recipe recipe, bool save)

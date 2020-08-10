@@ -15,5 +15,7 @@ namespace RecipeManager.Core.Repositories
         void UpdateRecipe(Recipe recipe, bool save);
         List<int> GetRecipeIds();
         Recipe GetRecipeById(int id);
+        void FavoriteRecipe(int recipeId, string userId, bool save);
+        void UnFavoriteRecipe(int recipeId, string userId, bool save);
     }
 }

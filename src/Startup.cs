@@ -27,6 +27,7 @@ namespace RecipeManager.API
                 options.UseNpgsql(Configuration.GetConnectionString("RecipeManagerContext")));
             services.AddScoped<IRateRepository, RateRepository>();
             services.AddScoped<IRecipeRepository, RecipeRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ITrainer, Trainer>();
             services.AddScoped<IPredictor, Predictor>();
             services.AddControllers();
