@@ -14,11 +14,15 @@ namespace RecipeManager.API.Controllers
     {
         private readonly ILogger<RateController> _logger;
         private readonly IRateRepository _rateRepository;
+        private readonly IUserRepository _userRepository;
 
-        public RateController(ILogger<RateController> logger, IRateRepository rateRepository)
+
+        public RateController(ILogger<RateController> logger, IRateRepository rateRepository, IUserRepository userRepository)
         {
             _logger = logger;
             _rateRepository = rateRepository;
+            _userRepository = userRepository;
+
         }
 
         [HttpPost]
@@ -26,6 +30,7 @@ namespace RecipeManager.API.Controllers
         {
             try
             {
+                rating.UserId = _userRepository.GetByAuthId(rating.UserId).Id.ToString();
                 _rateRepository.CreateRating(rating, true);
                 return Ok();
             }
@@ -34,6 +39,12 @@ namespace RecipeManager.API.Controllers
                 _logger.LogError(e.Message);
                 return StatusCode(500);
             }
+        }
+
+        [HttpGet]
+        public IActionResult Get([FromQuery]int userId, int recipeId)
+        {
+            return Ok(_rateRepository.Get(userId.ToString(), recipeId));
         }
     }
 }

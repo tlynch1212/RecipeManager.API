@@ -19,6 +19,11 @@ namespace RecipeManager.Core.Repositories
             return _dbContext.Ratings.ToList();
         }
 
+        public Rating Get(string userId, int recipeId)
+        {
+            return _dbContext.Ratings.FirstOrDefault(r => r.UserId == userId && r.RecipeId == recipeId);
+        }
+
         public void CreateRating(Rating rating, bool save)
         {
             _dbContext.Ratings.Add(rating);

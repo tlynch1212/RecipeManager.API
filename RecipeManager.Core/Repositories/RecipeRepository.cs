@@ -32,7 +32,18 @@ namespace RecipeManager.Core.Repositories
 
         public List<Recipe> GetRecipesForUser(string userId)
         {
-            return _dbContext.Recipes.Where(t => t.UserId == userId && t.IsShared && t.SharedWith.Contains(userId)).Include("Ingredients").Include("Instructions").ToList();
+            var recipes = _dbContext.Recipes.Where(t => t.SharedWith != null).Include("Ingredients").Include("Instructions").ToList();
+            var recipesShared = new List<Recipe>();
+            foreach (var recipe in recipes)
+            {
+                if (recipe.SharedWith.Contains(userId)) {
+                    recipesShared.Add(recipe);
+                }
+
+            }
+            recipesShared.AddRange(_dbContext.Recipes.Where(t => t.UserId == userId && !recipesShared.Select(r => r.Id).Contains(t.Id)).Include("Ingredients").Include("Instructions").ToList());
+
+            return recipesShared;
         }
 
         public void FavoriteRecipe(int recipeId, string userId, bool save)
