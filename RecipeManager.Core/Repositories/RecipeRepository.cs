@@ -17,7 +17,7 @@ namespace RecipeManager.Core.Repositories
 
         public List<Recipe> GetRecipes(int fetchCount)
         {
-            return _dbContext.Recipes.Where(r => r.IsPublic == true).OrderBy(t => Guid.NewGuid()).Take(fetchCount).Include("Ingredients").Include("Instructions").ToList();
+            return _dbContext.Recipes.Where(r => r.IsPublic).OrderBy(t => Guid.NewGuid()).Take(fetchCount).Include("Ingredients").Include("Instructions").ToList();
         }
 
         public Recipe GetRecipeById(int id)
@@ -27,7 +27,7 @@ namespace RecipeManager.Core.Repositories
 
         public List<int> GetRecipeIds()
         {
-            return _dbContext.Recipes.Where(r => r.IsPublic == true).OrderBy(t => Guid.NewGuid()).Select(t => t.Id).ToList();
+            return _dbContext.Recipes.Where(r => r.IsPublic).OrderBy(t => Guid.NewGuid()).Select(t => t.Id).ToList();
         }
 
         public List<Recipe> GetRecipesForUser(string userId)

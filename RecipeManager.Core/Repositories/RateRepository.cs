@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using RecipeManager.Core.Models;
+﻿using RecipeManager.Core.Models;
 using System.Collections.Generic;
 using System.Linq;
 

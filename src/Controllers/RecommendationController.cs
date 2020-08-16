@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using RecipeManager.Core.Recommendations;
 using RecipeManager.Core.Repositories;
 
@@ -12,12 +11,12 @@ namespace RecipeManager.API.Controllers
     [Authorize]
     public class RecommendationController : Controller
     {
-        private readonly ILogger<RecommendationController> _logger;
+        private readonly ILoggerWrapper _logger;
         private readonly ITrainer _trainer;
         private readonly IPredictor _predictor;
         private readonly IUserRepository _userRepository;
 
-        public RecommendationController(ILogger<RecommendationController> logger, ITrainer trainer, IPredictor predictor, IUserRepository userRepository)
+        public RecommendationController(ILoggerWrapper logger, ITrainer trainer, IPredictor predictor, IUserRepository userRepository)
         {
             _logger = logger;
             _trainer = trainer;
@@ -34,7 +33,7 @@ namespace RecipeManager.API.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(e.Message);
+                _logger.LogError(e, e.Message);
                 return StatusCode(500);
             }
         }
@@ -50,7 +49,7 @@ namespace RecipeManager.API.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(e.Message);
+                _logger.LogError(e, e.Message);
                 return StatusCode(500);
             }
         }

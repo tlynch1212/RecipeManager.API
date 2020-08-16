@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using RecipeManager.Core.Models;
-using RecipeManager.Core.Recommendations.Models;
 using RecipeManager.Core.Repositories;
 using System;
 

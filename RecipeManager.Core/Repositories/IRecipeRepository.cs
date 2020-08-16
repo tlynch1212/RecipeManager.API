@@ -1,5 +1,4 @@
 ﻿using RecipeManager.Core.Models;
-using RecipeManager.Core.Recommendations.Models;
 using System.Collections.Generic;
 
 namespace RecipeManager.Core.Repositories

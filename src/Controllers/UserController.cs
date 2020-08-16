@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using RecipeManager.Core.Repositories;
 using System;
 
@@ -11,10 +10,10 @@ namespace RecipeManager.API.Controllers
     [Authorize]
     public class UserController : ControllerBase
     {
-        private readonly ILogger<UserController> _logger;
+        private readonly ILoggerWrapper _logger;
         private readonly IUserRepository _userRepository;
 
-        public UserController(ILogger<UserController> logger, IUserRepository userRepository)
+        public UserController(ILoggerWrapper logger, IUserRepository userRepository)
         {
             _logger = logger;
             _userRepository = userRepository;
@@ -29,7 +28,7 @@ namespace RecipeManager.API.Controllers
             }
             catch(Exception e)
             {
-                _logger.LogError(e.Message);
+                _logger.LogError(e, e.Message);
                 return StatusCode(500);
             }
         }

@@ -1,20 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.ML;
+﻿using Microsoft.ML;
 using Microsoft.ML.Data;
 using Microsoft.ML.Trainers;
-using RecipeManager.Core.Models;
 using RecipeManager.Core.Recommendations.Models;
 using RecipeManager.Core.Repositories;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 namespace RecipeManager.Core.Recommendations
 {
     public class Trainer : ITrainer
     {
-        private IRateRepository _rateRepository;
+        private readonly IRateRepository _rateRepository;
 
         public Trainer(IRateRepository rateRepository)
         {
@@ -30,7 +26,7 @@ namespace RecipeManager.Core.Recommendations
             return EvaluateModel(mlContext, testDataView, trainedModel);
         }
 
-        public (IDataView training, IDataView test) LoadData(MLContext mlContext)
+        private (IDataView training, IDataView test) LoadData(MLContext mlContext)
         {
             var r = new Random();
             var data = _rateRepository.GetAll().Select(s => new RecipeModel
@@ -48,7 +44,7 @@ namespace RecipeManager.Core.Recommendations
             return (trainingDataView, testDataView);
         }
 
-        public ITransformer BuildAndTrainModel(MLContext mlContext, IDataView trainingDataView, int numberOfIterations)
+        private ITransformer BuildAndTrainModel(MLContext mlContext, IDataView trainingDataView, int numberOfIterations)
         {
             var options = new MatrixFactorizationTrainer.Options
             {
@@ -65,10 +61,10 @@ namespace RecipeManager.Core.Recommendations
             return trainerEstimator.Fit(trainingDataView);
         }
 
-        public RegressionMetrics EvaluateModel(MLContext mlContext, IDataView testDataView, ITransformer model)
+        private RegressionMetrics EvaluateModel(MLContext mlContext, IDataView testDataView, ITransformer model)
         {
             var prediction = model.Transform(testDataView);
-            return mlContext.Regression.Evaluate(prediction, labelColumnName: "Rating", scoreColumnName: "Score");
+            return mlContext.Regression.Evaluate(prediction, "Rating");
         }
     }
 }

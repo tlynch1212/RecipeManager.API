@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace RecipeManager.Core.Models
+﻿namespace RecipeManager.Core.Models
 {
     public class Ingredient
     {

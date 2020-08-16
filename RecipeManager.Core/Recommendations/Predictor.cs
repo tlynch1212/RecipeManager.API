@@ -30,7 +30,7 @@ namespace RecipeManager.Core.Recommendations
                                RecipeId = recipeId
                            })
                         orderby p.Score descending
-                        select (RecipeId: recipeId, Score: p.Score)).Take(amount);
+                        select (RecipeId: recipeId, p.Score)).Take(amount);
 
             var recipes = new List<Recipe>();
             foreach (var prediction in topRecommendations)
