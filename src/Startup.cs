@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using RecipeManager.Core;
 using RecipeManager.Core.Recommendations;
 using RecipeManager.Core.Repositories;
@@ -27,6 +28,8 @@ namespace RecipeManager.API
         {
             services.AddDbContext<RecipeManagerContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("RecipeManagerContext")));
+            services.AddLogging();
+            services.AddScoped<ILoggerWrapper, LoggerWrapper>();
             services.AddScoped<IRateRepository, RateRepository>();
             services.AddScoped<IRecipeRepository, RecipeRepository>();
             services.AddScoped<IUserRepository, UserRepository>();

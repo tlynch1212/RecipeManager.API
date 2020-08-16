@@ -26,6 +26,8 @@ namespace RecipeManager.API.Controllers
         {
             try
             {
+                var user = _userRepository.GetByAuthId(recipe.UserId);
+                recipe.UserId = user.Id.ToString();
                 _recipeRepository.CreateRecipe(recipe, true);
                 return Ok();
             }

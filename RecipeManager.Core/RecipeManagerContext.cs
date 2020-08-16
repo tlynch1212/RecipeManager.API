@@ -1,9 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using RecipeManager.Core.Models;
 
 
 namespace RecipeManager.Core
 {
+    [ExcludeFromCodeCoverage]
     public class RecipeManagerContext : DbContext
     {
         public DbSet<Recipe> Recipes { get; set; }

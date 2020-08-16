@@ -9,7 +9,7 @@ namespace RecipeManager.Core.Recommendations
 {
     public class Predictor : IPredictor
     {
-        private IRecipeRepository _recipeRepository;
+        private readonly IRecipeRepository _recipeRepository;
 
         public Predictor(IRecipeRepository recipeRepository)
         {

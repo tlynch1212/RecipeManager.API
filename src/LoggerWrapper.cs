@@ -5,11 +5,11 @@ using Microsoft.Extensions.Logging;
 namespace RecipeManager.API
 {
     [ExcludeFromCodeCoverage]
-    public class LoggerWrapper<T> : ILoggerWrapper
+    public class LoggerWrapper : ILoggerWrapper
     {
-        private readonly ILogger<T> _logger;
+        private readonly ILogger<LoggerWrapper> _logger;
 
-        public LoggerWrapper(ILogger<T> logger)
+        public LoggerWrapper(ILogger<LoggerWrapper> logger)
         {
             _logger = logger;
         }

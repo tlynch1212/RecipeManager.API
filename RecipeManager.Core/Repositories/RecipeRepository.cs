@@ -43,7 +43,7 @@ namespace RecipeManager.Core.Repositories
             }
             recipesShared.AddRange(_dbContext.Recipes.Where(t => t.UserId == userId && !recipesShared.Select(r => r.Id).Contains(t.Id)).Include("Ingredients").Include("Instructions").ToList());
 
-            return recipesShared;
+            return recipesShared.OrderBy(t => t.Name).ToList();
         }
 
         public void FavoriteRecipe(int recipeId, string userId, bool save)
