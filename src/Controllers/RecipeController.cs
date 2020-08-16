@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using RecipeManager.Core.Models;
 using RecipeManager.Core.Repositories;
 using System;
@@ -11,11 +10,11 @@ namespace RecipeManager.API.Controllers
    // [Authorize]
     public class RecipeController : ControllerBase
     {
-        private readonly ILogger<RecipeController> _logger;
+        private readonly ILoggerWrapper _logger;
         private readonly IRecipeRepository _recipeRepository;
         private readonly IUserRepository _userRepository;
 
-        public RecipeController(ILogger<RecipeController> logger, IRecipeRepository recipeRepository, IUserRepository userRepository)
+        public RecipeController(ILoggerWrapper logger, IRecipeRepository recipeRepository, IUserRepository userRepository)
         {
             _logger = logger;
             _recipeRepository = recipeRepository;
@@ -32,7 +31,7 @@ namespace RecipeManager.API.Controllers
             }
             catch(Exception e)
             {
-                _logger.LogError(e.Message);
+                _logger.LogError(e, e.Message);
                 return StatusCode(500);
             }
         }
@@ -47,7 +46,7 @@ namespace RecipeManager.API.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(e.Message);
+                _logger.LogError(e, e.Message);
                 return StatusCode(500);
             }
         }
@@ -63,7 +62,7 @@ namespace RecipeManager.API.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(e.Message);
+                _logger.LogError(e, e.Message);
                 return StatusCode(500);
             }
         }
@@ -79,7 +78,7 @@ namespace RecipeManager.API.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(e.Message);
+                _logger.LogError(e, e.Message);
                 return StatusCode(500);
             }
         }
@@ -94,7 +93,7 @@ namespace RecipeManager.API.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(e.Message);
+                _logger.LogError(e, e.Message);
                 return StatusCode(500);
             }
         }

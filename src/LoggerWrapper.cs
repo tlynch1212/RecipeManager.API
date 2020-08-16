@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.Logging;
 
 namespace RecipeManager.API
 {
+    [ExcludeFromCodeCoverage]
     public class LoggerWrapper<T> : ILoggerWrapper
     {
         private readonly ILogger<T> _logger;

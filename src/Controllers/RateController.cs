@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using RecipeManager.Core.Models;
 using RecipeManager.Core.Repositories;
 using System;
@@ -12,12 +11,12 @@ namespace RecipeManager.API.Controllers
     [Authorize]
     public class RateController : ControllerBase
     {
-        private readonly ILogger<RateController> _logger;
+        private readonly ILoggerWrapper _logger;
         private readonly IRateRepository _rateRepository;
         private readonly IUserRepository _userRepository;
 
 
-        public RateController(ILogger<RateController> logger, IRateRepository rateRepository, IUserRepository userRepository)
+        public RateController(ILoggerWrapper logger, IRateRepository rateRepository, IUserRepository userRepository)
         {
             _logger = logger;
             _rateRepository = rateRepository;
@@ -36,7 +35,7 @@ namespace RecipeManager.API.Controllers
             }
             catch(Exception e)
             {
-                _logger.LogError(e.Message);
+                _logger.LogError(e, e.Message);
                 return StatusCode(500);
             }
         }
