@@ -30,7 +30,15 @@ namespace RecipeManager.Test.Controllers
         [Test]
         public void Create_CreatesRecipe()
         {
-            var expected = new Recipe();
+            var expected = new Recipe
+            {
+                UserId = "test"
+            };
+            _mockUserRepo.Setup(s => s.GetByAuthId(It.IsAny<string>())).Returns(new User
+            {
+                Id = 1,
+                AuthId = "test"
+            });
 
             var result = _controller.Create(expected) as OkResult;
             _mockRepo.Verify(s => s.CreateRecipe(expected, true), Times.Once);
@@ -41,6 +49,11 @@ namespace RecipeManager.Test.Controllers
         public void Create_WhenError_LogsAndReturnsExpected()
         {
             var expected = new Exception("test exception");
+            _mockUserRepo.Setup(s => s.GetByAuthId(It.IsAny<string>())).Returns(new User
+            {
+                Id = 1,
+                AuthId = "test"
+            });
             _mockRepo.Setup(s => s.CreateRecipe(It.IsAny<Recipe>(), It.IsAny<bool>())).Throws(expected);
 
             var result = _controller.Create(new Recipe()) as StatusCodeResult;
