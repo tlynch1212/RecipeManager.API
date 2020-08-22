@@ -32,14 +32,17 @@ namespace RecipeManager.Core.Repositories
 
         public List<Recipe> GetRecipesForUser(string userId)
         {
-            var recipes = _dbContext.Recipes.Where(t => t.SharedWith != null).Include("Ingredients").Include("Instructions").ToList();
+            var recipes = _dbContext.Recipes.Where(t => t.SharedWith != null).Include("Ingredients").Include("Instructions");
             var recipesShared = new List<Recipe>();
             foreach (var recipe in recipes)
             {
-                if (recipe.SharedWith.Contains(userId)) {
-                    recipesShared.Add(recipe);
+                if (recipe.SharedWith != null)
+                {
+                    if (recipe.SharedWith.Any(user => user.Id.ToString() == userId))
+                    {
+                        recipesShared.Add(recipe);
+                    }
                 }
-
             }
             recipesShared.AddRange(_dbContext.Recipes.Where(t => t.UserId == userId && !recipesShared.Select(r => r.Id).Contains(t.Id)).Include("Ingredients").Include("Instructions").ToList());
 
@@ -53,15 +56,28 @@ namespace RecipeManager.Core.Repositories
             {
                 if (recipe.SharedWith == null)
                 {
-                    recipe.SharedWith = new List<string>();
+                    recipe.SharedWith = new List<User>();
                 }
-                if (!recipe.SharedWith.Contains(userId))
+
+                var isAlreadyAdded = false;
+                foreach (var user in recipe.SharedWith)
                 {
-                    recipe.SharedWith.Add(userId);
+                    if (user.Id.ToString() == userId)
+                    {
+                        isAlreadyAdded = true;
+                    }
+                    break;
+                }
+
+                if (!isAlreadyAdded)
+                {
+                    var user = _dbContext.Users.FirstOrDefault(u => u.Id.ToString() == userId);
+                    recipe.SharedWith.Add(user);
+                    recipe.IsShared = true;
                     _dbContext.Recipes.Update(recipe);
                     if (save)
                     {
-                        _dbContext.SaveChanges();
+                        SaveChanges();
                     }
                 }
             }
@@ -72,11 +88,18 @@ namespace RecipeManager.Core.Repositories
             var recipe = _dbContext.Recipes.Find(recipeId);
             if (recipe.IsPublic)
             {
-                recipe.SharedWith.Remove(userId);
+                var user = _dbContext.Users.FirstOrDefault(u => u.Id.ToString() == userId);
+                recipe.SharedWith.Remove(user);
+
+                if (recipe.SharedWith.Count == 0)
+                {
+                    recipe.IsShared = false;
+                }
+
                 _dbContext.Recipes.Update(recipe);
                 if (save)
                 {
-                    _dbContext.SaveChanges();
+                    SaveChanges();
                 }
             }
         }
@@ -87,18 +110,8 @@ namespace RecipeManager.Core.Repositories
             _dbContext.Recipes.Add(recipe);
             if (save)
             {
-                _dbContext.SaveChanges();
+                SaveChanges();
             }
-        }
-
-        public void SaveChanges()
-        {
-            _dbContext.SaveChanges();
-        }
-
-        public Recipe CheckDuplication(Recipe recipe)
-        {
-            return _dbContext.Recipes.FirstOrDefault(t => t.Name.Equals(recipe.Name) && t.Instructions.Equals(recipe.Instructions));
         }
 
         public void UpdateRecipe(Recipe recipe, bool save)
@@ -106,7 +119,7 @@ namespace RecipeManager.Core.Repositories
             _dbContext.Recipes.Update(recipe);
             if (save)
             {
-                _dbContext.SaveChanges();
+                SaveChanges();
             }
         }
 
@@ -115,8 +128,13 @@ namespace RecipeManager.Core.Repositories
             _dbContext.Recipes.Remove(recipe);
             if (save)
             {
-                _dbContext.SaveChanges();
+                SaveChanges();
             }
+        }
+
+        private void SaveChanges()
+        {
+            _dbContext.SaveChanges();
         }
     }
 }

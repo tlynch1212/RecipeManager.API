@@ -9,6 +9,7 @@ using RecipeManager.Core.Repositories;
 
 namespace RecipeManager.Test.Controllers
 {
+    [TestFixture]
     class RateControllerTests
     {
         private RateController _controller;

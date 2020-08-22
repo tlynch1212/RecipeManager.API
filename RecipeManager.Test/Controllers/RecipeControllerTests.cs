@@ -10,6 +10,7 @@ using RecipeManager.Core.Repositories;
 
 namespace RecipeManager.Test.Controllers
 {
+    [TestFixture]
     class RecipeControllerTests
     {
         private RecipeController _controller;

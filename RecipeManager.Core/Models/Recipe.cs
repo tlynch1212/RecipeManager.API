@@ -14,7 +14,7 @@ namespace RecipeManager.Core.Models
         public List<Ingredient> Ingredients { get; set; }
         public bool IsPublic { get; set; }
         public bool IsShared { get; set; }
-        public List<string> SharedWith { get; set; }
+        public List<User> SharedWith { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime ChangedDate { get; set; }
     }

@@ -13,6 +13,7 @@ using RecipeManager.Core.Repositories;
 
 namespace RecipeManager.Test.Controllers
 {
+    [TestFixture]
     class RecommendationControllerTests
     {
         private RecommendationController _controller;

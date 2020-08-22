@@ -7,6 +7,7 @@ using RecipeManager.Core.Repositories;
 
 namespace RecipeManager.Test.Controllers
 {
+    [TestFixture]
     class BrowseControllerTests
     {
         private BrowseController _controller;

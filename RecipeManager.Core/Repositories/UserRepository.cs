@@ -16,19 +16,5 @@ namespace RecipeManager.Core.Repositories
         {
             return _dbContext.Users.FirstOrDefault(t => t.AuthId == authId);
         }
-
-        public void CreateUser(User user, bool save)
-        {
-            _dbContext.Users.Add(user);
-            if (save)
-            {
-                _dbContext.SaveChanges();
-            }
-        }
-
-        public void SaveChanges()
-        {
-            _dbContext.SaveChanges();
-        }
     }
 }

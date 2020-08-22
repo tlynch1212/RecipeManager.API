@@ -28,11 +28,11 @@ namespace RecipeManager.Core.Repositories
             _dbContext.Ratings.Add(rating);
             if (save)
             {
-                _dbContext.SaveChanges();
+                SaveChanges();
             }
         }
 
-        public void SaveChanges()
+        private void SaveChanges()
         {
             _dbContext.SaveChanges();
         }
