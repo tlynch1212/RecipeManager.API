@@ -38,6 +38,20 @@ namespace RecipeManager.API.Controllers
             }
         }
 
+        [HttpGet("test")]
+        public IActionResult Test()
+        {
+            try
+            {
+                return Ok(_trainer.TestModel());
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, e.Message);
+                return StatusCode(500);
+            }
+        }
+
         [HttpGet("predict")]
         public IActionResult Predict([FromQuery] string authId, int amount)
         {

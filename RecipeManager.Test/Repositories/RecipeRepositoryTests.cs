@@ -50,7 +50,7 @@ namespace RecipeManager.Test.Repositories
                 },
                 IsPublic = true,
                 IsShared = true,
-                SharedWith = new List<User>(),
+                SharedWith = new List<RecipeUser>(),
                 Name = "recipe name"
             };
 
@@ -140,12 +140,15 @@ namespace RecipeManager.Test.Repositories
                 {
                     Id = 45,
                     IsShared = true,
-                    SharedWith = new List<User>
-                    {
-                        user
-                    }
+                    SharedWith = new List<RecipeUser>()
                 }
             };
+
+            expectedRecipes.Last().SharedWith.Add(new RecipeUser
+            {
+                User = user,
+                Recipe = expectedRecipes.Last()
+            });
 
             AddRecipesToContext(expectedRecipes);
             var result = _recipeRepository.GetRecipesForUser("2");
@@ -175,18 +178,22 @@ namespace RecipeManager.Test.Repositories
                 Id = 1,
                 IsPublic = true,
                 IsShared = true,
-                SharedWith = new List<User>
-                {
-                    user
-                }
+                SharedWith = new List<RecipeUser>()
             };
+
+            expectedRecipe.SharedWith.Add(new RecipeUser
+            {
+                User = user,
+                Recipe = expectedRecipe
+            });
 
             RecipeManagerContextHelper.AddRecipe(_recipeManagerContext, recipe);
 
             _recipeRepository.FavoriteRecipe(recipe.Id, user.Id.ToString(),true);
             var result = _recipeRepository.GetRecipeById(recipe.Id);
             
-            Assert.AreEqual(expectedRecipe.SharedWith.First().Id, result.SharedWith.First().Id);
+            Assert.AreEqual(expectedRecipe.SharedWith.First().User.Id, result.SharedWith.First().User.Id);
+            Assert.AreEqual(expectedRecipe.SharedWith.First().Recipe.Id, result.SharedWith.First().Recipe.Id);
             Assert.AreEqual(expectedRecipe.IsShared, result.IsShared);
 
         }
@@ -205,11 +212,14 @@ namespace RecipeManager.Test.Repositories
                 Id = 1,
                 IsPublic = true,
                 IsShared = true,
-                SharedWith = new List<User>
-                {
-                    user
-                }
+                SharedWith = new List<RecipeUser>()
             };
+
+            recipe.SharedWith.Add(new RecipeUser
+            {
+                User = user,
+                Recipe = recipe
+            });
 
             RecipeManagerContextHelper.AddRecipe(_recipeManagerContext, recipe);
 
@@ -235,18 +245,21 @@ namespace RecipeManager.Test.Repositories
                 Id = 1,
                 IsPublic = true,
                 IsShared = true,
-                SharedWith = new List<User>
-                {
-                    user
-                }
+                SharedWith = new List<RecipeUser>()
             };
+
+            recipe.SharedWith.Add(new RecipeUser
+            {
+                User = user,
+                Recipe = recipe
+            });
 
             var expectedRecipe = new Recipe
             {
                 Id = 1,
                 IsPublic = true,
                 IsShared = false,
-                SharedWith = new List<User>()
+                SharedWith = new List<RecipeUser>()
             };
 
             RecipeManagerContextHelper.AddRecipe(_recipeManagerContext, recipe);
@@ -282,7 +295,7 @@ namespace RecipeManager.Test.Repositories
                 Instructions = new List<Instruction>(),
                 IsPublic = true,
                 IsShared = true,
-                SharedWith = new List<User>(),
+                SharedWith = new List<RecipeUser>(),
                 Name = "recipe name"
             };
 
@@ -323,7 +336,7 @@ namespace RecipeManager.Test.Repositories
                 Instructions = new List<Instruction>(),
                 IsPublic = true,
                 IsShared = true,
-                SharedWith = new List<User>(),
+                SharedWith = new List<RecipeUser>(),
                 Name = "recipe name"
             };
 

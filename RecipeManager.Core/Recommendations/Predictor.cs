@@ -29,6 +29,7 @@ namespace RecipeManager.Core.Recommendations
                                UserId = userId,
                                RecipeId = recipeId
                            })
+                        where p.Score > 1
                         orderby p.Score descending
                         select (RecipeId: recipeId, p.Score)).Take(amount);
 

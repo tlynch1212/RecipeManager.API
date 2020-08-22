@@ -26,6 +26,15 @@ namespace RecipeManager.Core.Recommendations
             return EvaluateModel(mlContext, testDataView, trainedModel);
         }
 
+        public RegressionMetrics TestModel()
+        {
+            var mlContext = new MLContext();
+            (IDataView trainingDataView, IDataView testDataView) = LoadData(mlContext);
+            var model = mlContext.Model.Load("model.zip", out _);
+            var prediction = model.Transform(testDataView);
+            return mlContext.Regression.Evaluate(prediction, "Rating");
+        }
+
         private (IDataView training, IDataView test) LoadData(MLContext mlContext)
         {
             var r = new Random();

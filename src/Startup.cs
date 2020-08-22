@@ -32,9 +32,12 @@ namespace RecipeManager.API
             services.AddScoped<IRateRepository, RateRepository>();
             services.AddScoped<IRecipeRepository, RecipeRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IRecipeUserRepository, RecipeUserRepository>();
             services.AddScoped<ITrainer, Trainer>();
             services.AddScoped<IPredictor, Predictor>();
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
             services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
             {
                 builder.AllowAnyOrigin()
