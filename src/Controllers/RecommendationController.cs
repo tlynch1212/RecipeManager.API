@@ -34,7 +34,7 @@ namespace RecipeManager.API.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e, e.Message);
-                return StatusCode(500);
+                return StatusCode(500, e.Message);
             }
         }
 
@@ -48,7 +48,7 @@ namespace RecipeManager.API.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e, e.Message);
-                return StatusCode(500);
+                return StatusCode(500, e.Message);
             }
         }
 
@@ -64,7 +64,7 @@ namespace RecipeManager.API.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e, e.Message);
-                return StatusCode(500);
+                return StatusCode(500, e.Message);
             }
         }
     }
