@@ -25,11 +25,11 @@ namespace RecipeManager.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult Train([FromQuery] int iterations)
+        public IActionResult Train([FromQuery] int iterations, int approximationRank, double learningRate)
         {
             try
             {
-                return Ok(_trainer.Train(iterations));
+                return Ok(_trainer.Train(iterations, approximationRank, learningRate));
             }
             catch (Exception e)
             {

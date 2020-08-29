@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using RecipeManager.Core;
+using RecipeManager.Core.Analytics;
 using RecipeManager.Core.Recommendations;
 using RecipeManager.Core.Repositories;
 
@@ -33,6 +34,7 @@ namespace RecipeManager.API
             services.AddScoped<IRecipeRepository, RecipeRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IRecipeUserRepository, RecipeUserRepository>();
+            services.AddScoped<IDataAggregation, DataAggregration>();
             services.AddScoped<ITrainer, Trainer>();
             services.AddScoped<IPredictor, Predictor>();
             services.AddControllers().AddNewtonsoftJson(options =>

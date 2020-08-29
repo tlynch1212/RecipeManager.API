@@ -36,9 +36,9 @@ namespace RecipeManager.Test.Controllers
         public void Train_ReturnsExpected()
         {
             var expected = FormatterServices.GetUninitializedObject(typeof(RegressionMetrics)) as RegressionMetrics;
-            _mockTrainer.Setup(t => t.Train(It.IsAny<int>())).Returns(expected);
+            _mockTrainer.Setup(t => t.Train(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<double>())).Returns(expected);
 
-            var result = _controller.Train(1) as OkObjectResult;
+            var result = _controller.Train(1, 1, 1) as OkObjectResult;
             Assert.AreEqual(expected, result?.Value);
         }
 
@@ -61,9 +61,9 @@ namespace RecipeManager.Test.Controllers
         public void Train_WhenError_LogsAndReturnsExpected()
         {
             var expected = new Exception("test exception");
-            _mockTrainer.Setup(s => s.Train(It.IsAny<int>())).Throws(expected);
+            _mockTrainer.Setup(s => s.Train(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<double>())).Throws(expected);
 
-            var result = _controller.Train(1) as StatusCodeResult;
+            var result = _controller.Train(1,1,1) as StatusCodeResult;
             _mockLogger.Verify(x => x.LogError(expected, expected.Message), Times.Once);
             Assert.AreEqual(500, result?.StatusCode);
         }

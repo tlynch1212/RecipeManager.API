@@ -36,7 +36,7 @@ namespace RecipeManager.Core.Recommendations
             var recipes = new List<Recipe>();
             foreach (var prediction in topRecommendations)
             {
-                if (prediction.Score >= 3.5)
+                if (prediction.Score >= 5)
                 {
                     recipes.Add(_recipeRepository.GetRecipeById(prediction.RecipeId));
                 }
